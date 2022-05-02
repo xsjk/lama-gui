@@ -181,6 +181,7 @@ class MainWindow(tk.Tk):
         self.canvas2.bind('<Button-1>', process)
         self.bind_all('<Button-3>',process)
         self.canvas.bind('<Button-1>', onLeftButtonDown)  #单击左键
+        self.canvas.bind('<Button-2>', save)  #单击中键
         self.canvas.bind('<B1-Motion>', onLeftButtonMove)  #按住并移动左键
         self.canvas.bind_all('<MouseWheel>', onMouseWheel)  #滚轮放大缩小
 
