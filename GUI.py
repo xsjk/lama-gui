@@ -139,6 +139,7 @@ class MainWindow(tk.Tk):
         @self.not_processing
         def open(event):
             filename = filedialog.askopenfilename(filetypes=[('PNG图片', '*.png')])
+            self.K=1
             print(f"open {filename}")
             self.open(filename)
         
@@ -197,7 +198,6 @@ class MainWindow(tk.Tk):
         self.img_path = os.path.join(self.temp, self.img_name)
         self.mask_name = os.path.splitext(self.img_name)[0] + '_mask.png'
         self.mask_path = os.path.join(self.temp, self.mask_name)
-        self.K = 1
         self.load_img()
         if self.width*1.5>self.winfo_screenwidth() or self.height*1.5>self.winfo_screenheight():
             self.K = max(self.width/self.winfo_screenwidth()*1.5, self.height/self.winfo_screenheight()*1.5)
