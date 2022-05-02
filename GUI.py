@@ -118,7 +118,7 @@ class MainWindow(tk.Tk):
 
 
 
-        self.progressbar = ttk.Progressbar(self, orient=tk.HORIZONTAL, length=self.width, mode='indeterminate', value=0)
+        self.progressbar = ttk.Progressbar(self, orient=tk.HORIZONTAL, length=int(self.width/self.K), mode='indeterminate', value=0)
         self.progressbar.start(10)
 
 
@@ -146,7 +146,6 @@ class MainWindow(tk.Tk):
         def undo(event):
             if len(self.history)>1:
                 print("undo")
-                print(self.history,self.future)
                 self.future.append(self.history.pop())
                 self.image = self.history[-1]
                 self.load_img()
@@ -155,7 +154,6 @@ class MainWindow(tk.Tk):
         def redo(event):
             if len(self.future)>0:
                 print("redo")
-                print(self.history,self.future)
                 self.history.append(self.future.pop())
                 self.image = self.history[-1]
                 self.load_img()
@@ -189,9 +187,9 @@ class MainWindow(tk.Tk):
         self.wm_deiconify()
 
     def refresh_canvas2(self):
-        self.canvas2.config(width=int(self.R_max*2/self.K), height=int(self.R_max*2/self.K))
+        self.canvas2.config(width=int(self.R_max*2), height=int(self.R_max*2))
         self.canvas2.delete("all")
-        self.canvas2.create_oval(int((self.R_max/self.K-self.R/self.K)), int((self.R_max/self.K-self.R/self.K)), int((self.R_max/self.K+self.R/self.K)), int((self.R_max/self.K+self.R/self.K)), fill='black')
+        self.canvas2.create_oval(int((self.R_max-self.R)), int((self.R_max-self.R)), int((self.R_max+self.R)), int((self.R_max+self.R)), fill='black')
     
     
     def open(self,filename):
@@ -199,11 +197,10 @@ class MainWindow(tk.Tk):
         self.img_path = os.path.join(self.temp, self.img_name)
         self.mask_name = os.path.splitext(self.img_name)[0] + '_mask.png'
         self.mask_path = os.path.join(self.temp, self.mask_name)
+        self.K = 1
         self.load_img()
-        # get screen size
-        print(self.winfo_screenwidth(), self.winfo_screenheight())
         if self.width*1.5>self.winfo_screenwidth() or self.height*1.5>self.winfo_screenheight():
-            self.K = max(self.winfo_screenwidth()/self.width*1.2, self.winfo_screenheight()/self.height*1.2)
+            self.K = max(self.width/self.winfo_screenwidth()*1.5, self.height/self.winfo_screenheight()*1.5)
             self.load_img()
 
         self.history.append(self.image)
@@ -229,7 +226,6 @@ class MainWindow(tk.Tk):
         self.progressbar.pack(expand=tk.YES,fill=tk.X,padx=1)
         self.canvas2.pack_forget()
         # self.canvas2.delete("all")
-        # self.canvas2.create_text(self.R_max, self.R_max, text="Processing...", fill="red", font=("Arial", 20))
 
         self.mask.save(self.mask_path)
         
